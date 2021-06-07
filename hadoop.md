@@ -135,3 +135,8 @@ Go to `logs/` to view possible error.
    ufw allow 9000
    ```
    may slove the issue. Also check `/etc/hosts` to see if the configuration for `hadoop-master` is correct. Use LAN IP instead of localhost IP.
+
+
+## Switch from cluster mode to pseudo-distributed
+1. Change hdfs/tarn xml files
+2. Edit `etc/hadoop/workers`, delete `hadoop-slave1` and so on
