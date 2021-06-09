@@ -94,13 +94,14 @@ Every Spark application consists of a driver program that runs the user’s main
 
 RDDs are created by starting with a file in the HDFS (or any other Hadoop-supported file system), or an existing Scala collection in the driver program, and transforming it. Users may also ask Spark to persist an RDD in memory.
 
-RDD can be manipukated using Spark shell, SparkR, pyspark, scala and java APIs, etc.
+RDD can be manipulated using Spark shell, SparkR, pyspark, scala and java APIs, etc.
 
 RDD programming guide: https://spark.apache.org/docs/2.4.3/rdd-programming-guide.html
 
 Simple examples in pyspark:
 ```py
 >>> data = [1, 2, 3, 4, 5]
+>>> distData = sc.parallelize(data)
 >>> distData = distData.map(lambda x: 2*x)
 >>> dataList = distData.collect()
 >>> dataList
