@@ -49,7 +49,7 @@
     ```
     ./standalone.sh
     ```
-7. Check hdfs status
+7. Check hdfs status in `hadoop-master`
     ```
     hdfs fsck /   
     ```
