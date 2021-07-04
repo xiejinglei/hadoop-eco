@@ -58,11 +58,11 @@ RUN apt-get install -y openjdk-${JDK_VERSION}-jdk-headless python python-pip \
                         binutils build-essential cmake x11-xserver-utils clang libgmp-dev
 
 # generate & configure ssh key
-#RUN ssh-keygen -t rsa -f ~/.ssh/id_rsa -P '' && \
-#    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-COPY .config/id_rsa .config/id_rsa.pub config/ssh/config .ssh/
-RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-#COPY config/ssh/config .ssh/config
+RUN ssh-keygen -t rsa -f ~/.ssh/id_rsa -P '' && \
+    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+COPY config/ssh/config .ssh/
+#COPY .config/id_rsa .config/id_rsa.pub config/ssh/config .ssh/
+#RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
 
 # setup hadoop user group
@@ -86,7 +86,7 @@ COPY --chown=hadoop:hadoop --from=tarballs /root/hadoop-${HADOOP_VERSION} ${HADO
 #    rm tarballs/hadoop-${HADOOP_VERSION}.tar.gz
 #RUN mkdir -p ${HADOOP_HOME}/hdfs/data/nameNode && \
 #    mkdir -p ${HADOOP_HOME}/hdfs/data/dataNode
-COPY config/hadoop/* ${HADOOP_HOME}/etc/hadoop/
+#COPY config/hadoop/* ${HADOOP_HOME}/etc/hadoop/
 ENV LD_LIBRARY_PATH=${HADOOP_HOME}/lib/native
 
 # install & configure drill
@@ -97,7 +97,7 @@ COPY --chown=hadoop:hadoop --from=tarballs /root/apache-drill-${DRILL_VERSION} $
 #    tar --owner=hadoop --group=hadoop --mode='g+wx' -xzf - && \
 #    mv apache-drill-${DRILL_VERSION} ${DRILL_HOME} && \
 #    rm tarballs/apache-drill-${DRILL_VERSION}.tar.gz
-COPY config/drill/* ${DRILL_HOME}/conf/
+#COPY config/drill/* ${DRILL_HOME}/conf/
 ENV PATH=${DRILL_HOME}/bin:${PATH}
 
 # install & configure zookeeper
@@ -109,7 +109,7 @@ COPY --chown=hadoop:hadoop --from=tarballs /root/apache-zookeeper-${ZOOKEEPER_VE
 #    mv apache-zookeeper-${ZOOKEEPER_VERSION}-bin ${ZOOKEEPER_HOME} && \
 #    rm tarballs/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz
 # RUN mkdir -p ${ZOOKEEPER_HOME}/data
-COPY config/zookeeper/* ${ZOOKEEPER_HOME}/conf/
+#COPY config/zookeeper/* ${ZOOKEEPER_HOME}/conf/
 ENV PATH=${ZOOKEEPER_HOME}/bin:${PATH}
 
 # install & configure spark
@@ -126,14 +126,15 @@ RUN cd ${SPARK_HOME}/python && \
     python3 setup.py sdist > /dev/null && \
     pip3 install dist/pyspark-${SPARK_VERSION}.tar.gz && \
     rm dist/pyspark-${SPARK_VERSION}.tar.gz
-COPY config/spark/* ${SPARK_HOME}/conf/
+#COPY config/spark/* ${SPARK_HOME}/conf/
 ENV PATH=${SPARK_HOME}/bin:${PATH}
 
 # install softwares
-RUN apt-get install -y zsh screen unrar maven
+RUN apt-get install -y screen unrar maven
+#RUN apt-get install -y zsh screen unrar maven
 #RUN ln -s /usr/bin/python3 /usr/bin/python
-RUN sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-COPY config/zsh/* ./
+#RUN sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+#COPY config/zsh/* ./
 COPY config/screen/* ./
 
 # install python packages

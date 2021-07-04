@@ -46,10 +46,11 @@ Everyone in the class is required to come to lab and connect his or her device t
    
    We can use `docker overlay network` to connect multiple Docker daemon hosts. `docker swarm` is a tool to manage the network.
 
-   ![Alt text](swarm.JPG).
+   ![Alt text](swarm.JPG)
 
    Links: 
    - https://www.jianshu.com/p/4efdb30f4eaf
    - https://blog.csdn.net/mylitboy/article/details/106369721
 
 4. Start a container
+5. Add ssh keys to `authorized_keys`
