@@ -1,2 +1,7 @@
 ./download.sh
 sudo docker build . -t xiejinglei/hadoop-cluster:1.0 --network=host
+
+
+docker save -o <path for generated tar file> <image name>
+docker save -o /home/xiejinglei/course/ve472/hadoop-eco/lab-cluster/image.tar xiejinglei/hadoop-cluster:1.0
+docker load -i <path to image tar file>

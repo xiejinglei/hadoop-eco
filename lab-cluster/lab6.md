@@ -16,31 +16,15 @@ Everyone in the class is required to come to lab and connect his or her device t
 
 ## Setup
 ### I. Docker
-1. Install docker
-   ```bash
-   # Install dependencies
-    apt-get update
-    apt-get install -y \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        gpg \
-        gnupg \
-        lsb-release
-
-    # Install docker
-    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-    echo \
-    "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
-    $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-    apt-get update
-    apt-get install -y docker-ce docker-ce-cli containerd.io
-
-    # docker-compose
-    curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    chmod +x /usr/local/bin/docker-compose
-    ```
+1. Install docker 
+   
+   ubuntu example: https://docs.docker.com/engine/install/ubuntu/
+   
 2. Obtain docker image
+
+    ```bash
+    sudo docker pull xiejinglei/hadoop-cluster:1.0
+    ```
 
 3. Join network
    
@@ -54,3 +38,7 @@ Everyone in the class is required to come to lab and connect his or her device t
 
 4. Start a container
 5. Add ssh keys to `authorized_keys`
+
+### II. Configure hadoop
+
+### III. Configure spark and drill
