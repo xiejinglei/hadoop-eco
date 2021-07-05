@@ -1,0 +1,2 @@
+./download.sh
+sudo docker build . -t xiejinglei/hadoop-cluster:1.0 --network=host

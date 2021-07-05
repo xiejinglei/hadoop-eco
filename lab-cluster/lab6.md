@@ -40,7 +40,7 @@ Everyone in the class is required to come to lab and connect his or her device t
     curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
     ```
-2. Build docker image
+2. Obtain docker image
 
 3. Join network
    

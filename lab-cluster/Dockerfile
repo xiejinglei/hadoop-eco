@@ -158,6 +158,8 @@ RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple virtualenv pipenv
 
 # copy bash scripts
 #COPY script/* ./
+COPY entrypoint.sh ./
+RUN chmod +x ~/entrypoint.sh
 #RUN chmod +x ~/entrypoint.sh && \
 #    chmod +x ~/start-hadoop.sh && \
 #    chmod +x ~/run-wordcount.sh 
@@ -165,5 +167,5 @@ RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple virtualenv pipenv
 #    chmod +x ${HADOOP_HOME}/sbin/start-dfs.sh && \
 #    chmod +x ${HADOOP_HOME}/sbin/start-yarn.sh
 
-#ENTRYPOINT ["/root/entrypoint.sh"]
+ENTRYPOINT ["/root/entrypoint.sh"]
 #CMD ["0"]
