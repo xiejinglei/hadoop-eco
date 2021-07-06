@@ -1,0 +1,27 @@
+### Pack and unpack an image
+docker save -o <path for generated tar file> <image name>
+docker load -i <path to image tar file>
+
+docker save -o ./image.tar tcimba/hadoop-cluster:latest
+chmod 777 image.tar
+scp tmpuser@10.119.7.243:/home/tmpuser/image.tar .
+docker load -i image.tar
+
+
+### swarm
+init swarm with master ip: 192.168.31.108
+Swarm initialized: current node (qm53z9bzt6at9hpx19p20jcpz) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-5rcl051g8q8y6hpo4vryzhe6p704gcpjfp1at7jg11vg5zu4oo-7k9fcb4o4ggsshyqnmn9t6dxw 192.168.31.108:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+
+### stop and clean
+master and worker -> stop.sh
+docker swarm leave
+docker network rm <network>
+docker network prune
+docker system prune
