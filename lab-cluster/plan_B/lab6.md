@@ -187,3 +187,26 @@ Go to root of the git repo.
     ```bash
     ./drillbit.sh restart
     ```
+
+3. Drill: Error like 
+    ```java
+    ERROR o.a.c.framework.imps.EnsembleTracker - Invalid config event received {server.1=10.190.3.170:2888:3888:participant, version=0, server.3=10.190.3.91:2888:3888:participant, server.2=10.190.3.172:2888:3888:participant}
+    ```
+
+    This is because of zookeeper version update (>3.6.5). Go to `$ZOOKEEPER_HOME/conf/zoo.cfg` and change every 
+    ```
+    server.0=hadoop-master:2888:3888
+    server.1=hadoop-worker-1:2888:3888
+    ...
+    ```
+    to 
+    ```
+    server.0=hadoop-master:2888:3888;2181
+    server.1=hadoop-worker-1:2888:3888;2181
+    ...
+    ```
+    Then restart zookeeper.
+    ```bash
+    $ZOOKEEPER_HOME/bin/zkServer.sh restart
+    ```
+
