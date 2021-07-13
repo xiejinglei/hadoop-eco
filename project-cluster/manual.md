@@ -60,6 +60,12 @@
     ```
     yarn top   
     ```
+    Or use web dashboard:
+    ```
+    ### status
+    http://<IP_MASTER>:8088/
+    http://<IP_MASTER>:9870/
+    ```
 
 
 
