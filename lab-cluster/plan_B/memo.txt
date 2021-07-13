@@ -25,3 +25,7 @@ docker swarm leave
 docker network rm <network>
 docker network prune
 docker system prune
+
+### status
+http://192.168.3.34:8088/
+http://192.168.3.34:9870/

@@ -9,6 +9,8 @@
     ZOOKEEPER_VERSION=3.5.9
     SPARK_VERSION=2.4.8
     ```
+4. Some configurations of zookeeper and drill has been changed.
+
 
 ## Test on single server
 1. Install git. Clone repo `hadoop-cluster`.
@@ -52,6 +54,7 @@
 7. Check hdfs status in `hadoop-master`
     ```
     hdfs fsck /   
+    hadoop dfsadmin -report
     ```
     Check yarn status
     ```
