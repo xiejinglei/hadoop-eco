@@ -226,3 +226,32 @@
     ```bash
     ./drillbit.sh start
     ```
+6. Environment variables
+    ```bash 
+    # Java
+    export JDK_VERSION=8
+    export JAVA_HOME=/usr/lib/jvm/java-${JDK_VERSION}-openjdk-amd64
+
+    # Hadoop
+    export HADOOP_HOME=/usr/local/hadoop
+    export HADOOP_CLASSPATH=${JAVA_HOME}/lib/tools.jar:${HADOOP_CLASSPATH}
+    export PATH=${JAVA_HOME}/bin:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${PATH}
+    export LD_LIBRARY_PATH=${HADOOP_HOME}/lib/native
+
+    # Drill
+    export DRILL_HOME=/usr/local/drill
+    export PATH=${DRILL_HOME}/bin:${PATH}
+
+    # Zookeeper 
+    export ZOOKEEPER_HOME=/usr/local/zookeeper
+    export PATH=${ZOOKEEPER_HOME}/bin:${PATH}
+
+    # Spark
+    export SPARK_HOME=/usr/local/spark
+    export PATH=${SPARK_HOME}/bin:${PATH}
+    export YARN_CONF_DIR=$HADOOP_HOME/etc/hadoop
+    ```
+6. Grant permission in hdfs
+    ```bash
+    hadoop fs -chown -R pgroup1:pgroup1 /user/pgroup1
+    ```
