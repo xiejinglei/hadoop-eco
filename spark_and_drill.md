@@ -58,8 +58,9 @@ General steps for spark on YARN:
 	user: xiejinglei
     ```
     When running on YARN, 2 modes exist :
-    - `client` : runs the Driver on the client which submits the spark job. In this case, this creates a process on the master.
-    - `cluster` : runs the Driver on a slave node. This will create a process (for the driver) inside the ApplicationMaster container of one of the slave nodes.
+    - `client` : runs the Driver on the client which submits the spark job. The driver runs in the client process, and the application master is only used for requesting resources from YARN.
+    - `cluster` : runs the Driver on a slave node.the Spark driver runs inside an application master process which is managed by YARN on the cluster, and the client can go away after initiating the application.
+
 
 Spark shell
 ```

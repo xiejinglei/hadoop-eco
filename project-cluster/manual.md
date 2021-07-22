@@ -69,9 +69,112 @@
 
 
 
-## Steps
-### Starting with servers
-- Install docker for each server
+## Deploy over cluster
+1. Initialization:
+    ```bash
+    apt-get update && apt install -y git
+    git clone https://github.com/xiejinglei/hadoop-cluster.git 
+    git clone https://github.com/xiejinglei/hadoop-eco.git 
+    bash ~/hadoop-eco/project-cluster/install-docker.sh
+    ```
+2. ssh: 
+    ```bash
+    ssh-keygen -t rsa -f ~/.ssh/id_rsa -P '' && \
+    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+    ```
+    At `hadoop-cluster`,
+    ```bash
+    mkdir -p .config && cp ~/.ssh/{id_rsa,id_rsa.pub} .config
+    ```
+3. Build docker image
+    ```bash
+    ./download.sh
+    ./build/docker-build-image.sh
+    ```
+    (If network fails, rerunning build may solve the problem)
+4. Copy the image to all machines.
+5. Configure network:
+   
+   On network manager node,   
+   ```bash
+    docker system prune
+    master/init_swarm.sh
+    master/init_network.sh
+    ```
+    note (7/22/2021)
+    ```bash 
+    docker swarm join --token SWMTKN-1-1k9taznxwmh32ec4pf3vmbdjl50339c5umez2kkuro857ugw6j-3auj14y2w43umk0qg1blfause 192.168.3.8:2377
+    ```
+    On workers,
+    ```bash
+    docker system prune
+    worker/join_swarm.sh <TOKEN> <IP-ADDRESS-OF-MANAGER>
+    ```
+    And then paste the command generated in manager.
+6. Start containers
+
+    On master node,
+    ```bash
+    export WORKER_NUMBER=7
+    master/start.sh
+    ```
+    On `worker-n`, start a detached (-d) and interactive (-it) container `hadoop-worker-n` that connects to `hadoop-net`. 
+    
+    Mapping:
+
+    `ve472-hadoop-2` -> `WORKER_ID=1`
+    ...
+
+    `ve472-hadoop-8` -> `WORKER_ID=7`
+    ```bash
+    export WORKER_NUMBER=7
+    export WORKER_ID=X
+    worker/start.sh
+    ```
+7. Start `NameNode` daemon, `DataNode` daemon, `ResourceManager` daemon and `NodeManager` daemon in `hadoop-master` container.
+
+    ```bash
+    master/start_hadoop.sh
+    ```
+    Check `jps` to see if the services have been started.
+
+    Run sample task:
+    ```bash
+    ./run-wordcount.sh
+    ```
+8. Now we can check yarn status from our own laptop
+    ```
+    http://10.119.6.238:8088/
+    ```
+    where `10.119.6.238` is master's public IP. Also check hdfs at 
+    ```
+    http://10.119.6.238:9870/
+    ```
+    Note: make sure to open the ports 9870 and 8088 on the host machine. Container ports are mapped to host ports.
+9. Testing drill
+    Go to `$DRILL_HOME` and run `bin/drill-conf`. Should see
+    ```
+    Apache Drill 1.18.0
+    "Drill never goes out of style."
+    apache drill>
+    ```
+    Check drillbit status
+    ```sql
+    apache drill> SELECT * FROM sys.drillbits;
+    +-----------------+-----------+--------------+-----------+-----------+---------+---------+--------+
+    |    hostname     | user_port | control_port | data_port | http_port | current | version | state  |
+    +-----------------+-----------+--------------+-----------+-----------+---------+---------+--------+
+    | hadoop-worker-4 | 31010     | 31011        | 31012     | 8047      | true    | 1.18.0  | ONLINE |
+    | hadoop-worker-3 | 31010     | 31011        | 31012     | 8047      | false   | 1.18.0  | ONLINE |
+    | hadoop-worker-6 | 31010     | 31011        | 31012     | 8047      | false   | 1.18.0  | ONLINE |
+    | hadoop-worker-5 | 31010     | 31011        | 31012     | 8047      | false   | 1.18.0  | ONLINE |
+    | hadoop-master   | 31010     | 31011        | 31012     | 8047      | false   | 1.18.0  | ONLINE |
+    | hadoop-worker-2 | 31010     | 31011        | 31012     | 8047      | false   | 1.18.0  | ONLINE |
+    | hadoop-worker-1 | 31010     | 31011        | 31012     | 8047      | false   | 1.18.0  | ONLINE |
+    | hadoop-worker-7 | 31010     | 31011        | 31012     | 8047      | false   | 1.18.0  | ONLINE |
+    +-----------------+-----------+--------------+-----------+-----------+---------+---------+--------+
+    ```
+    If there is any drillbit not working, go to the corresponding container and check its status. See `trouble-shooting`.
 
 
 
@@ -98,4 +201,28 @@
 3. Spark may need to set environment variables
     ```
     export YARN_CONF_DIR=$HADOOP_HOME/etc/hadoop
+    ```
+4. If worker cannot join swarm, and 
+    ```bash
+    telnet <ip-of-manager> 2377
+    ```
+    cannot be reached, then the port 2377 might haven been blocked on manager. Necessary ports for overlay network: https://docs.docker.com/network/overlay/
+    ```bash
+    apt-get install ufw
+    ufw allow 2377
+    ufw allow 7946
+    ufw allow 4789
+    ```
+    Check the result:
+    ```bash
+    netstat -tulpn 
+    ```
+    If still cannot reach, may ask IT to open the port.
+5. Check drillbit status: go to `bin`
+    ```bash
+    ./drillbit.sh status
+    ```
+    If not running, may need to start drillbit manually.
+    ```bash
+    ./drillbit.sh start
     ```

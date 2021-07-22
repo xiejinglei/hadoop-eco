@@ -72,6 +72,15 @@ Go to root of the git repo.
     ```
     The token and ip should be shared to the workers in the following step.
 
+   On manager, create an attachable overlay network called `hadoop-net`.
+    ```bash
+    master/init_network.sh
+    ```
+    May use the following to check network status:
+    ```bash
+    docker network ls
+    ```
+
 
 2. On `worker-n`, join the swarm.
     ```bash
@@ -84,7 +93,7 @@ Go to root of the git repo.
     ```
     Use the following to check node status on manager:
     ```bash
-   docker node ls
+    docker node ls
     ```
     Result:
     ```bash
@@ -93,14 +102,7 @@ Go to root of the git repo.
     z1ol1zwbxt53j1n79ixhgguw5     ubuntu          Ready     Active                          20.10.7
     ```
 
-3. On manager, create an attachable overlay network called `hadoop-net`.
-    ```bash
-    master/init_network.sh
-    ```
-    May use the following to check network status:
-    ```bash
-    docker network ls
-    ```
+
 
 ## III. Start services
 
