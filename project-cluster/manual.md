@@ -177,6 +177,20 @@
     If there is any drillbit not working, go to the corresponding container and check its status. See `trouble-shooting`.
 
 
+## Mount data
+Mount server file system:
+```bash
+sshfs -o port=2223 -o allow_other ve472@focs.ji.sjtu.edu.cn: .disk/
+```
+Unmount:
+```bash
+fusermount -u .disk/
+```
+Mount the iso file:
+``` bash
+mkdir d
+mount -o loop .disk/millionsong.iso d
+```
 
 
 ## Trouble shooting
@@ -254,4 +268,12 @@
 6. Grant permission in hdfs
     ```bash
     hadoop fs -chown -R pgroup1:pgroup1 /user/pgroup1
+    ```
+7. Mount home: 
+    ```
+    /var/lib/docker/volumes/hadoop-master_home/_data
+    ```
+8. Drill check schema
+    ```sql
+    describe schema dfs;
     ```
